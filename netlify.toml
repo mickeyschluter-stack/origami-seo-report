@@ -1,0 +1,43 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[functions]
+  external_node_modules = ["mssql", "tedious"]
+
+[functions."api"]
+  timeout = 26
+  # Ship the agent-traffic snapshot with the bundle so /api/agent-traffic can read it.
+  included_files = ["server/agentTrafficSnapshot.json"]
+
+# Background function name (filename suffix "-background" required for the 15-min timeout)
+[functions."cron-refresh-background"]
+  timeout = 900
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# ── Security headers (defense-in-depth; edge-auth gates access first) ──
+# CSP allows 'unsafe-inline' style because React ships inline style objects and
+# Recharts injects inline styles; script-src is strict 'self'. Google Fonts are
+# loaded from index.html. frame-ancestors 'none' prevents clickjacking.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"

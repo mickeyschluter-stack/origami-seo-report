@@ -1,0 +1,53 @@
+{
+  "_updated": "2026-06-18",
+  "_source": "Scrunch agent traffic, sc-domain origamirisk.com (brand 3475)",
+  "_note": "AI agent / bot request logs. agent_type: indexer = search/AI index crawlers, retrieval = answer engines fetching the live page for a user query, training = bots ingesting content for model training. Snapshot refreshed on a schedule (not real-time).",
+  "weeks": [
+    {
+      "week": "2026W23",
+      "start": "2026-06-01",
+      "complete": true,
+      "agents": [
+        { "source": "amazonbot", "type": "training", "requests": 5701 },
+        { "source": "bingbot", "type": "indexer", "requests": 4833 },
+        { "source": "chatgpt-user", "type": "retrieval", "requests": 4179 },
+        { "source": "petalbot", "type": "indexer", "requests": 2437 },
+        { "source": "claude", "type": "training", "requests": 2312 },
+        { "source": "googlebot", "type": "indexer", "requests": 1446 },
+        { "source": "perplexitybot", "type": "indexer", "requests": 1026 },
+        { "source": "oai-searchbot", "type": "indexer", "requests": 614 },
+        { "source": "applebot", "type": "indexer", "requests": 603 },
+        { "source": "baiduspider", "type": "indexer", "requests": 434 },
+        { "source": "yandexbot", "type": "indexer", "requests": 342 },
+        { "source": "meta-externalagent", "type": "training", "requests": 303 },
+        { "source": "bytespider", "type": "training", "requests": 244 },
+        { "source": "ccbot", "type": "training", "requests": 118 },
+        { "source": "gptbot", "type": "training", "requests": 47 },
+        { "source": "perplexity-user", "type": "retrieval", "requests": 5 }
+      ]
+    },
+    {
+      "week": "2026W24",
+      "start": "2026-06-08",
+      "complete": true,
+      "agents": [
+        { "source": "bingbot", "type": "indexer", "requests": 8912 },
+        { "source": "chatgpt-user", "type": "retrieval", "requests": 4777 },
+        { "source": "amazonbot", "type": "training", "requests": 2832 },
+        { "source": "claude", "type": "training", "requests": 2589 },
+        { "source": "petalbot", "type": "indexer", "requests": 2554 },
+        { "source": "googlebot", "type": "indexer", "requests": 1485 },
+        { "source": "perplexitybot", "type": "indexer", "requests": 1242 },
+        { "source": "oai-searchbot", "type": "indexer", "requests": 598 },
+        { "source": "applebot", "type": "indexer", "requests": 526 },
+        { "source": "baiduspider", "type": "indexer", "requests": 499 },
+        { "source": "yandexbot", "type": "indexer", "requests": 490 },
+        { "source": "meta-externalagent", "type": "training", "requests": 326 },
+        { "source": "gptbot", "type": "training", "requests": 281 },
+        { "source": "bytespider", "type": "training", "requests": 212 },
+        { "source": "ccbot", "type": "training", "requests": 80 },
+        { "source": "perplexity-user", "type": "retrieval", "requests": 8 }
+      ]
+    }
+  ]
+}

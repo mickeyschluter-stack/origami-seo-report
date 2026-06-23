@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+*.log
+nul
+tmp_data.json
+
+# Debug/audit scripts
+audit_march.*
+check_*.mjs
+dashboard_audit.*
+full_audit.*
+sp_*.mjs
+verify_*.mjs
+
+.vercel
+.netlify
