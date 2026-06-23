@@ -1,0 +1,29 @@
+name: Deploy to Netlify
+
+# Auto-deploy on every push to main, including the weekly agent-traffic
+# snapshot refresh committed by the scheduled task. Uses the Netlify CLI with
+# a stored auth token + site ID (repo secrets), so no GitHub App / OAuth link
+# is needed.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build and deploy to production
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: npx netlify-cli@26 deploy --build --prod --message "CI deploy ${{ github.sha }}"
