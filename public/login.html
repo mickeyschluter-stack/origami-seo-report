@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/DA_logo.png">
+  <title>Origami Command Center — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; }
+
+    /* ── Full-screen slideshow ── */
+    #slideshow { position: fixed; inset: 0; background: #0B1F3A; }
+    .slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.2s ease; }
+    .slide.active { opacity: 1; }
+    #slide-tint { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(11,31,58,0.62) 0%, rgba(10,77,162,0.42) 50%, rgba(11,31,58,0.62) 100%); pointer-events: none; }
+    #slide-gradient { position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to top, rgba(11,31,58,0.9) 0%, transparent 100%); pointer-events: none; }
+    #slide-footer { position: absolute; bottom: 28px; left: 32px; right: 32px; display: flex; align-items: center; justify-content: space-between; }
+    #slide-client span { color: rgba(255,255,255,0.75); font-size: 12px; font-weight: 500; letter-spacing: 0.03em; }
+    #dots { display: flex; gap: 6px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.35); border: none; cursor: pointer; padding: 0; transition: background 0.3s, transform 0.3s; }
+    .dot.on { background: #1A7FE0; transform: scale(1.3); }
+
+    /* ── Centered overlay ── */
+    #overlay { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; gap: 24px; overflow-y: auto; }
+    #headline { display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+    .presents { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 14px rgba(0,0,0,0.75); }
+    .title-text { font-size: 31px; font-weight: 800; color: #fff; text-align: center; line-height: 1.25; text-shadow: 0 2px 16px rgba(0,0,0,0.65); }
+
+    #card { background: #fff; border-radius: 12px; padding: 32px 28px 24px; width: 100%; max-width: 400px; box-shadow: 0 24px 80px rgba(0,0,0,0.55); display: flex; flex-direction: column; align-items: stretch; }
+    #da-logo { height: 26px; width: auto; margin-bottom: 16px; align-self: center; }
+    #report-badge { display: flex; align-items: center; justify-content: center; gap: 8px; background: #ebf3fd; border: 1px solid #c3ddf7; border-radius: 6px; padding: 6px 14px; margin-bottom: 24px; }
+    #report-badge span { font-size: 12px; font-weight: 600; color: #0A4DA2; letter-spacing: 0.04em; text-transform: uppercase; }
+    .section { display: none; }
+    .section.on { display: block; }
+    .hint { color: #718096; font-size: 13px; margin-bottom: 14px; text-align: center; }
+    .check-title { font-weight: 700; color: #0B1F3A; margin-bottom: 8px; text-align: center; }
+    input[type="email"], input[type="password"], input[type="text"] { display: block; width: 100%; height: 42px; padding: 0 13px; border: 1.5px solid #e2e8f0; border-radius: 7px; font-size: 14px; font-family: inherit; margin-bottom: 11px; outline: none; color: #2d3748; transition: border-color 0.15s; }
+    input:focus { border-color: #1A7FE0; }
+    .btn { display: block; width: 100%; height: 43px; background: #1A7FE0; color: #fff; border: none; border-radius: 7px; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; margin-bottom: 8px; transition: background 0.15s; }
+    .btn:hover { background: #0A4DA2; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .ghost { display: block; width: 100%; background: none; border: none; color: #718096; font-size: 13px; cursor: pointer; font-family: inherit; padding: 4px 0; text-align: center; }
+    #err { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; border-radius: 6px; padding: 10px 13px; font-size: 13px; margin-bottom: 14px; display: none; }
+    #card-footer { color: #a0aec0; font-size: 11px; text-align: center; border-top: 1px solid #edf2f7; padding-top: 14px; margin-top: 16px; }
+    #card-footer a { color: #a0aec0; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div id="slideshow">
+  <div class="slide" style="background-image:url('/slides/origami-1.jpg')"></div>
+  <div class="slide" style="background-image:url('/slides/origami-2.jpg')"></div>
+  <div class="slide" style="background-image:url('/slides/origami-3.jpg')"></div>
+  <div id="slide-tint"></div>
+  <div id="slide-gradient"></div>
+  <div id="slide-footer">
+    <div id="slide-client"><span>origamirisk.com</span></div>
+    <div id="dots"></div>
+  </div>
+</div>
+
+<div id="overlay">
+  <div id="headline">
+    <span class="presents">Direct Agents Presents</span>
+    <span class="title-text">Origami<br>Command Center</span>
+  </div>
+  <div id="card">
+    <img id="da-logo" src="/DA_logo.png" alt="Direct Agents">
+    <div id="report-badge"><span>Origami Command Center</span></div>
+    <div id="err"></div>
+    <div id="sec-login" class="section on">
+      <form id="form-login">
+        <input type="email" id="login-email" placeholder="Email" required autofocus>
+        <input type="password" id="login-pw" placeholder="Password" required>
+        <button type="submit" class="btn" id="btn-login">Sign In</button>
+        <button type="button" class="ghost" onclick="showSec('forgot')">Forgot password?</button>
+      </form>
+    </div>
+    <div id="sec-forgot" class="section">
+      <form id="form-forgot">
+        <p class="hint">Enter your email and we'll send a reset link.</p>
+        <input type="email" id="forgot-email" placeholder="Email" required>
+        <button type="submit" class="btn" id="btn-forgot">Send Reset Link</button>
+        <button type="button" class="ghost" onclick="showSec('login')">Back to sign in</button>
+      </form>
+    </div>
+    <div id="sec-check-reset" class="section">
+      <p class="check-title">Reset link sent</p>
+      <p class="hint">Check <strong id="reset-addr"></strong> for a password reset link.</p>
+      <button type="button" class="ghost" onclick="showSec('login')">Back to sign in</button>
+    </div>
+    <div id="sec-invite" class="section">
+      <form id="form-invite">
+        <p class="hint">You've been invited. Set a password to activate your account.</p>
+        <input type="text" id="invite-name" placeholder="Full name (optional)">
+        <input type="password" id="invite-pw" placeholder="Password (min 8 chars)" required minlength="8">
+        <button type="submit" class="btn" id="btn-invite">Activate Account</button>
+      </form>
+    </div>
+    <div id="sec-reset" class="section">
+      <form id="form-reset">
+        <p class="hint">Enter your new password.</p>
+        <input type="password" id="new-pw" placeholder="New password (min 8 chars)" required minlength="8">
+        <button type="submit" class="btn" id="btn-reset">Set New Password</button>
+      </form>
+    </div>
+    <div id="card-footer">
+      Invite-only &middot; <a href="https://directagents.com" target="_blank" rel="noreferrer">directagents.com</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import GTNS from 'https://cdn.jsdelivr.net/npm/gotrue-js@0.9.29/+esm';
+const GoTrue = GTNS.default || GTNS;
+
+// ── Slideshow ──
+const slides = Array.from(document.querySelectorAll('.slide'));
+const dotsEl = document.getElementById('dots');
+let cur = 0, timer;
+slides.forEach((_, i) => {
+  const b = document.createElement('button');
+  b.className = 'dot' + (i === 0 ? ' on' : '');
+  b.setAttribute('aria-label', 'Slide ' + (i + 1));
+  b.onclick = () => goTo(i);
+  dotsEl.appendChild(b);
+});
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  dotsEl.children[cur].classList.remove('on');
+  cur = (n + slides.length) % slides.length;
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('on');
+  clearInterval(timer); timer = setInterval(() => goTo(cur + 1), 5000);
+}
+slides[0].classList.add('active');
+timer = setInterval(() => goTo(cur + 1), 5000);
+
+// STANDALONE site: Identity (GoTrue) lives on THIS same origin. Authenticate
+// against this site's own /.netlify/identity. setCookie:false + manual
+// setSharedCookie so the edge gate's nf_jwt cookie is written explicitly.
+const auth = new GoTrue({ APIUrl: '/.netlify/identity', setCookie: false });
+
+function setSharedCookie(token) {
+  document.cookie = 'nf_jwt=' + token.access_token +
+    '; Domain=directagents.com; Path=/; Secure; SameSite=Lax; Max-Age=' + (token.expires_in || 3600);
+}
+function showSec(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
+  document.getElementById('sec-' + name).classList.add('on');
+}
+window.showSec = showSec;
+function showErr(msg) { const e = document.getElementById('err'); e.textContent = msg; e.style.display = 'block'; }
+function clearErr()   { const e = document.getElementById('err'); e.textContent = '';  e.style.display = 'none';  }
+function busy(id, label)   { const b = document.getElementById(id); b.disabled = true;  b.textContent = label; }
+function unbusy(id, label) { const b = document.getElementById(id); b.disabled = false; b.textContent = label; }
+
+;(function () {
+  // ?clearls — clear this origin's stored session before landing on the login form.
+  const sp = new URLSearchParams(window.location.search);
+  if (sp.has('clearls')) {
+    try { localStorage.removeItem('gotrue.user'); } catch (e) {}
+    const next = sp.get('next');
+    if (next) { window.location.replace(next); return; }
+    window.history.replaceState(null, '', '/login');
+    return;
+  }
+  const p = new URLSearchParams(window.location.hash.substring(1));
+  const inv = p.get('invite_token');
+  const rec = p.get('recovery_token');
+  const con = p.get('confirmation_token');
+  if (con) {
+    auth.confirm(con, true)
+      .then(() => { window.history.replaceState(null, '', '/login'); window.location.replace('/'); })
+      .catch(() => showErr('Email confirmation failed — the link may have expired.'));
+    return;
+  }
+  if (inv) { window.history.replaceState(null, '', '/login'); window._inviteToken = inv; showSec('invite'); return; }
+  if (rec) { window.history.replaceState(null, '', '/login'); window._recoveryToken = rec; showSec('reset'); return; }
+  const stored = auth.currentUser();
+  if (stored) {
+    stored.jwt(true)
+      .then(() => { setSharedCookie(stored.token); window.location.replace('/'); })
+      .catch(() => { try { localStorage.removeItem('gotrue.user'); } catch (e) {} });
+  }
+})();
+
+document.getElementById('form-login').onsubmit = async e => {
+  e.preventDefault(); clearErr(); busy('btn-login', 'Signing in…');
+  try {
+    const user = await auth.login(document.getElementById('login-email').value, document.getElementById('login-pw').value, true);
+    setSharedCookie(user.token); window.location.replace('/');
+  } catch (err) {
+    showErr(err.json?.error_description || err.message || 'Incorrect email or password.');
+    unbusy('btn-login', 'Sign In');
+  }
+};
+document.getElementById('form-forgot').onsubmit = async e => {
+  e.preventDefault(); clearErr(); busy('btn-forgot', 'Sending…');
+  const email = document.getElementById('forgot-email').value;
+  try {
+    await auth.requestPasswordRecovery(email);
+    document.getElementById('reset-addr').textContent = email;
+    showSec('check-reset');
+  } catch (err) { showErr(err.message || 'Could not send reset email.'); unbusy('btn-forgot', 'Send Reset Link'); }
+};
+document.getElementById('form-invite').onsubmit = async e => {
+  e.preventDefault(); clearErr(); busy('btn-invite', 'Activating…');
+  try {
+    const user = await auth.acceptInvite(window._inviteToken, document.getElementById('invite-pw').value, { data: { full_name: document.getElementById('invite-name').value } });
+    setSharedCookie(user.token); window.location.replace('/');
+  } catch (err) { showErr(err.message || 'Could not accept invitation.'); unbusy('btn-invite', 'Activate Account'); }
+};
+document.getElementById('form-reset').onsubmit = async e => {
+  e.preventDefault(); clearErr(); busy('btn-reset', 'Saving…');
+  try {
+    const user = await auth.recover(window._recoveryToken, true);
+    await user.update({ password: document.getElementById('new-pw').value });
+    setSharedCookie(user.token); window.location.replace('/');
+  } catch (err) { showErr(err.message || 'Password reset failed.'); unbusy('btn-reset', 'Set New Password'); }
+};
+</script>
+</body>
+</html>
