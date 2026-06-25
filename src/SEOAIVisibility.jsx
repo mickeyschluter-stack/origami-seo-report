@@ -302,11 +302,12 @@ export default function SEOAIVisibility() {
       </div>
 
       {/* ── Presence trend + competitive ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 12, alignItems: 'start' }}>
-        <div className="sp-chart-section">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 12, alignItems: 'stretch' }}>
+        <div className="sp-chart-section" style={{ display: 'flex', flexDirection: 'column' }}>
           <SectionHead title="AI Presence Trend" sub={`% of AI responses mentioning ${BRAND_NAME}, by week`} />
           {hasWeekly ? (
-            <ResponsiveContainer width="100%" height={240}>
+            <div style={{ flex: 1, minHeight: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={m.weekly} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#edf2f7" />
                 <XAxis dataKey="week" tick={{ fontSize: 11 }} />
@@ -318,6 +319,7 @@ export default function SEOAIVisibility() {
                 <Line yAxisId="pct" type="monotone" dataKey="presence" name="Presence" stroke={BRAND} strokeWidth={3} dot={{ r: 4, fill: BRAND }} activeDot={{ r: 5 }} />
               </ComposedChart>
             </ResponsiveContainer>
+            </div>
           ) : <p style={{ fontSize: 12, color: GREY }}>No weekly trend data in the current window.</p>}
         </div>
 
